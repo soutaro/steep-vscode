@@ -22,3 +22,7 @@ Requirements are:
 1. You have to have `Steepfile` in the root of the folder.
 2. You have to use Bundler.
 
+## Acknowledgments
+
+I want to thank [@wata727](https://github.com/wata727) for his works related to language server protocol support.
+He implemented the initial version of VSCode extension ([wata727/vscode-steep-lsc](https://github.com/wata727/vscode-steep-lsc)) and [LSP support in Steep](https://github.com/soutaro/steep/pull/79).
