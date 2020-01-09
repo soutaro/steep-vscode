@@ -1,6 +1,6 @@
 # Steep VSCode Integration
 
-This extension supports using Steep with Visual Studio Code.
+This extension supports using [Steep](https://github.com/soutaro/steep) with Visual Studio Code.
 
 ## Installation
 
