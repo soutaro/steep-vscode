@@ -17,7 +17,9 @@
 		"languages": [
 			{
 				"id": "ruby",
-				"filenames": ["Steepfile"]
+				"filenames": [
+					"Steepfile"
+				]
 			},
 			{
 				"id": "ruby-signature",
@@ -28,11 +30,11 @@
 		],
 		"commands": [
 			{
-			  "command": "steep.restartAll",
-			  "title": "Restart all",
-			  "category": "Steep"
+				"command": "steep.restartAll",
+				"title": "Restart all",
+				"category": "Steep"
 			}
-		  ]	  
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
