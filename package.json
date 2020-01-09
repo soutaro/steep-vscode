@@ -10,16 +10,29 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"workspaceContains:."
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"languages": [
+			{
+				"id": "ruby",
+				"filenames": ["Steepfile"]
+			},
+			{
+				"id": "ruby-signature",
+				"extensions": [
+					".rbs"
+				]
+			}
+		],
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+			  "command": "steep.restartAll",
+			  "title": "Restart all",
+			  "category": "Steep"
 			}
-		]
+		  ]	  
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

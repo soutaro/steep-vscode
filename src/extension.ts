@@ -1,27 +1,108 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { LanguageClient, LanguageClientOptions, ServerOptions, Disposable, ExecutableOptions } from 'vscode-languageclient';
+import { existsSync } from 'fs';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+const _clientSessions: Map<vscode.WorkspaceFolder, LanguageClient> = new Map();
+
+function stopSteep(folder: vscode.WorkspaceFolder) {
+	const client = _clientSessions.get(folder)
+
+	if (client) {
+		console.log(`Stopping steep in ${folder.uri}...`)
+
+		_clientSessions.delete(folder)
+		client.stop()
+	}
+}
+
+function hasClient(folder: vscode.WorkspaceFolder): boolean {
+	const client = _clientSessions.get(folder)
+	return client !== undefined
+}
+
+function startSteep(folder: vscode.WorkspaceFolder) {
+	if (_clientSessions.get(folder)) {
+		return
+	}
+
+	console.log(`Starting steep in ${folder.uri}...`)
+
+	let rubyopt = process.env.RUBYOPT
+	const options: ExecutableOptions = {
+		cwd: folder.uri.fsPath,
+		shell: true,
+		env: { ...process.env, RUBYOPT: `${ rubyopt || "" } -EUTF-8` }
+	}
+
+	const serverOptions: ServerOptions = {
+		run: {
+			command: "bundle",
+			args: ["exec", "steep", "langserver"],
+			options: options
+		},
+		debug: {
+			command: "bundle",
+			args: ["exec", "steep", "langserver", "--log-level=info"],
+			options: options
+		}
+	}
+
+	const clientOptions: LanguageClientOptions = {
+		documentSelector: ['ruby', 'ruby-signature'],
+		diagnosticCollectionName: "steeprb"
+	};
+
+	const client = new LanguageClient("Steep", serverOptions, clientOptions)
+	_clientSessions.set(folder, client)
+	client.start()
+
+	vscode.window.setStatusBarMessage(`Started steep in ${folder.uri.fsPath}...`, 3000);
+}
+
+function ensureSteep() {
+	if (vscode.workspace.workspaceFolders) {
+		const folders: Set<vscode.WorkspaceFolder> = new Set(vscode.workspace.workspaceFolders)
+		_clientSessions.forEach((client, folder) => {
+			if (!folders.has(folder)) {
+				stopSteep(folder)
+			}
+		})
+
+		vscode.workspace.workspaceFolders.forEach(folder => {
+			console.log(`Checking if steep should start in ${folder.uri}...`)
+			if (folder.uri.scheme === "file") {
+				const file = vscode.Uri.file(`${folder.uri.path}/Steepfile`)
+				if (existsSync(file.fsPath)) {
+					startSteep(folder)
+				}
+			}
+		})
+	}
+}
+
 export function activate(context: vscode.ExtensionContext) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "steeprb" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
+	let disposable = vscode.commands.registerCommand('steep.restartAll', () => {
+		vscode.workspace.workspaceFolders?.forEach((folder) => {
+			stopSteep(folder)
+			startSteep(folder)
+		})
 	});
 
 	context.subscriptions.push(disposable);
+
+	vscode.workspace.onDidChangeWorkspaceFolders(() => {
+		ensureSteep()
+	})
+
+	ensureSteep()
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+	_clientSessions.forEach((session, _) => {
+		session.stop()
+	})
+}
+
+export function restartAll() {
+	console.log(`restartAll`);
+}
