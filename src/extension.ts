@@ -30,21 +30,14 @@ function startSteep(folder: vscode.WorkspaceFolder) {
 	let rubyopt = process.env.RUBYOPT
 	const options: ExecutableOptions = {
 		cwd: folder.uri.fsPath,
-		shell: true,
 		env: { ...process.env, RUBYOPT: `${ rubyopt || "" } -EUTF-8` }
 	}
 
+	const loglevel = vscode.workspace.getConfiguration('steep').get("loglevel")
 	const serverOptions: ServerOptions = {
-		run: {
-			command: "bundle",
-			args: ["exec", "steep", "langserver"],
-			options: options
-		},
-		debug: {
-			command: "bundle",
-			args: ["exec", "steep", "langserver", "--log-level=info"],
-			options: options
-		}
+		command: "bundle",
+		args: ["exec", "steep", "langserver", `--log-level=${loglevel}`],
+		options: options
 	}
 
 	const clientOptions: LanguageClientOptions = {

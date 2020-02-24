@@ -9,7 +9,7 @@ This extension is not published yet. Build yourself and install to your VSCode.
 ```
 $ npm install
 $ npx vsce package
-$ code --install-extension steep-vscode-0.0.1.vsix    # Or install it from GUI
+$ code --install-extension steep-vscode-0.0.3.vsix    # Or install it from GUI
 ```
 
 ## How it works

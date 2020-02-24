@@ -1,10 +1,10 @@
 {
-	"name": "steeprb",
+	"name": "steep-vscode",
 	"displayName": "Steep",
 	"description": "Steep type checker",
 	"publisher": "soutaro",
 	"license": "MIT",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/soutaro/steep-vscode.git"
@@ -40,7 +40,18 @@
 				"title": "Restart all",
 				"category": "Steep"
 			}
-		]
+		],
+		"configuration": {
+			"title": "Steep",
+			"properties": {
+				"steep.loglevel": {
+					"markdownDescription": "The value for `--log-level` option. You can see the output in `output` tab.",
+					"type": "string",
+					"enum": ["error", "warn", "info", "debug"],
+					"default": "info"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
