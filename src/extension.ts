@@ -34,10 +34,23 @@ function startSteep(folder: vscode.WorkspaceFolder) {
 	}
 
 	const loglevel = vscode.workspace.getConfiguration('steep').get("loglevel")
-	const serverOptions: ServerOptions = {
-		command: "bundle",
-		args: ["exec", "steep", "langserver", `--log-level=${loglevel}`],
-		options: options
+	let serverOptions: ServerOptions
+
+	const binstub = vscode.Uri.file(`${folder.uri.path}/bin/steep`)
+	if (existsSync(binstub.fsPath)) {
+		console.log("Detected bin/steep...")
+		serverOptions = {
+			command: "bin/steep",
+			args: ["langserver", `--log-level=${loglevel}`],
+			options: options
+		}
+	} else {
+		console.log("Using bundle exec to start steep...")
+		serverOptions = {
+			command: "bundle",
+			args: ["exec", "steep", "langserver", `--log-level=${loglevel}`],
+			options: options
+		}
 	}
 
 	const clientOptions: LanguageClientOptions = {
