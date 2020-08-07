@@ -1,9 +1,8 @@
 # Change Log
 
-All notable changes to the "steeprb" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
 ## [Unreleased]
 
-- Initial release
+## [0.1.0] - 2020-08-07
+
+- Initial release on VS Code Extension Marketplace.
+- Use binstub (`bin/steep`) if exists to run Steep.
