@@ -1,21 +1,23 @@
 # Steep VSCode Integration
 
-This extension supports using [Steep](https://github.com/soutaro/steep) with Visual Studio Code.
+This extension is to integrate [Steep](https://github.com/soutaro/steep) to Visual Studio Code.
+It has LSP features including:
 
-## Installation
+* On-the-fly error reporting
+* Hover for method calls and variables
+* Completion for method names and variables
 
-This extension is not published yet. Build yourself and install to your VSCode.
+## Commands and options
 
-```
-$ npm install
-$ npx vsce package
-$ code --install-extension steep-vscode-0.0.3.vsix    # Or install it from GUI
-```
+* *Restart all* command restarts all Steep processes running for the VSCode. Try this command if something is not working correctly.
+* *Loglevel* option allows to control log level of Steep command. If you set `debug`, many debug prints will be printed and will help you debugging Steep.
 
 ## How it works
 
 When you open folder in VSCode, it checks if there is a `Steepfile` in the directory.
 When `Steepfile` is found, it starts Steep by `bundle exec steep langserver`.
+
+If you have a binstub `bin/steep`, it will be used instead of `bundle exec steep`. (`bin/steep langserver`)
 
 Requirements are:
 
