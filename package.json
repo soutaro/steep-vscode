@@ -47,7 +47,12 @@
 				"steep.loglevel": {
 					"markdownDescription": "The value for `--log-level` option. You can see the output in `output` tab.",
 					"type": "string",
-					"enum": ["error", "warn", "info", "debug"],
+					"enum": [
+						"error",
+						"warn",
+						"info",
+						"debug"
+					],
 					"default": "info"
 				}
 			}
