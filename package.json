@@ -10,7 +10,7 @@
 		"url": "https://github.com/soutaro/steep-vscode.git"
 	},
 	"engines": {
-		"vscode": "^1.41.0"
+		"vscode": "^1.47.0"
 	},
 	"categories": [
 		"Other"
@@ -63,7 +63,8 @@
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile",
-		"test": "node ./out/test/runTest.js"
+		"test": "node ./out/test/runTest.js",
+		"package": "vsce package"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.3",
