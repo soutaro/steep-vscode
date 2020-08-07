@@ -28,7 +28,7 @@
 				]
 			},
 			{
-				"id": "ruby-signature",
+				"id": "rbs",
 				"extensions": [
 					".rbs"
 				]

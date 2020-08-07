@@ -54,7 +54,7 @@ function startSteep(folder: vscode.WorkspaceFolder) {
 	}
 
 	const clientOptions: LanguageClientOptions = {
-		documentSelector: ['ruby', 'ruby-signature'],
+		documentSelector: ['ruby', 'rbs'],
 		diagnosticCollectionName: "steeprb"
 	};
 
