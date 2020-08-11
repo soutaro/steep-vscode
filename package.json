@@ -26,12 +26,6 @@
 				"filenames": [
 					"Steepfile"
 				]
-			},
-			{
-				"id": "rbs",
-				"extensions": [
-					".rbs"
-				]
 			}
 		],
 		"commands": [
