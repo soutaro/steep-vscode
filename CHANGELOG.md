@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.3.0] - 2020-08-17
+
+- Correct document selector for `.rbs` files
+
 ## [0.2.0] - 2020-08-11
 
 - Enable .rbs syntax highlight
