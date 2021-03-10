@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { LanguageClient, LanguageClientOptions, ServerOptions, Disposable, ExecutableOptions } from 'vscode-languageclient';
+import { LanguageClient, LanguageClientOptions, ServerOptions, ExecutableOptions } from 'vscode-languageclient/node';
 import { existsSync } from 'fs';
 
 const _clientSessions: Map<vscode.WorkspaceFolder, LanguageClient> = new Map();
