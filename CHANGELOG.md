@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.4.0] - 2021-03-10
+
+- Update to support VSCode 1.54.1
+
 ## [0.3.0] - 2020-08-17
 
 - Correct document selector for `.rbs` files
