@@ -48,6 +48,11 @@
 						"debug"
 					],
 					"default": "info"
+				},
+				"steep.jobs": {
+					"markdownDescription": "The value for `--jobs` option.",
+					"type": "number",
+					"default": 5
 				}
 			}
 		}
