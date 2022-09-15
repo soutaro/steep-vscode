@@ -10,7 +10,7 @@
 		"url": "https://github.com/soutaro/steep-vscode.git"
 	},
 	"engines": {
-		"vscode": "^1.54.0"
+		"vscode": "^1.71.0"
 	},
 	"categories": [
 		"Other"
@@ -73,7 +73,7 @@
 		"@types/glob": "^8.0.0",
 		"@types/mocha": "^9.0.0",
 		"@types/node": "^18.7.18",
-		"@types/vscode": "^1.54.0",
+		"@types/vscode": "^1.71.0",
 		"glob": "^8.0.3",
 		"mocha": "^10.0.0",
 		"tslint": "^6.1.3",
