@@ -82,6 +82,6 @@
 		"vscode-test": "^1.6.1"
 	},
 	"dependencies": {
-		"vscode-languageclient": "^7.0.0"
+		"vscode-languageclient": "^8.0.2"
 	}
 }
