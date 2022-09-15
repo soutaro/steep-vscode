@@ -48,6 +48,15 @@
 						"debug"
 					],
 					"default": "info"
+				},
+				"steep.jobs": {
+					"markdownDescription": "The value for `--jobs` option.",
+					"type": [
+						"numeric",
+						"null"
+					],
+					"default": null,
+					"minimum": 1
 				}
 			}
 		}
@@ -61,16 +70,16 @@
 		"package": "vsce package"
 	},
 	"devDependencies": {
-		"@types/glob": "^7.1.3",
+		"@types/glob": "^8.0.0",
 		"@types/mocha": "^9.0.0",
-		"@types/node": "^14.14.33",
+		"@types/node": "^18.7.18",
 		"@types/vscode": "^1.54.0",
-		"glob": "^7.1.5",
-		"mocha": "^8.3.1",
+		"glob": "^8.0.3",
+		"mocha": "^10.0.0",
 		"tslint": "^6.1.3",
-		"typescript": "^4.2.3",
-		"vsce": "^1.85.1",
-		"vscode-test": "^1.5.1"
+		"typescript": "^4.8.3",
+		"vsce": "^2.11.0",
+		"vscode-test": "^1.6.1"
 	},
 	"dependencies": {
 		"vscode-languageclient": "^7.0.0"
