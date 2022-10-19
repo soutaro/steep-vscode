@@ -133,8 +133,8 @@ export async function activate(context: vscode.ExtensionContext) {
 	await ensureSteep()
 }
 
-export function deactivate() {
-	_clientSessions.forEach(async (session, _) => {
+export async function deactivate() {
+	for (const [folder, session] of _clientSessions) {
 		await session.dispose()
-	})
+	}
 }
