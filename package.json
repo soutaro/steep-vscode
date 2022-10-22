@@ -39,7 +39,7 @@
 			"title": "Steep",
 			"properties": {
 				"steep.loglevel": {
-					"markdownDescription": "The value for `--log-level` option. You can see the output in `output` tab.",
+					"markdownDescription": "The value for `--log-level` option of Steep Language Server. You can see the output in `output` tab.",
 					"type": "string",
 					"enum": [
 						"error",
@@ -50,7 +50,7 @@
 					"default": "info"
 				},
 				"steep.jobs": {
-					"markdownDescription": "The value for `--jobs` option.",
+					"markdownDescription": "The value for `--jobs` option. This is the number of type-check workers of Steep Language Server.",
 					"type": [
 						"numeric",
 						"null"
