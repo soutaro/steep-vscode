@@ -56,10 +56,7 @@
 				},
 				"steep.jobs": {
 					"markdownDescription": "The value for `--jobs` option. This is the number of type-check workers of Steep Language Server.",
-					"type": [
-						"numeric",
-						"null"
-					],
+					"type": ["integer", "null"],
 					"default": null,
 					"minimum": 1
 				}
