@@ -38,6 +38,16 @@
 		"configuration": {
 			"title": "Steep",
 			"properties": {
+				"steep.enabled": {
+					"markdownDescription": "Enable/disable Steep on directory with `Steepfile`",
+					"type": "boolean",
+					"default": true
+				},
+				"steep.command": {
+					"markdownDescription": "Command line to start steep (Empty to default: `bin/steep` or `bundle exec steep`)",
+					"type": "string",
+					"default": ""
+				},
 				"steep.loglevel": {
 					"markdownDescription": "The value for `--log-level` option of Steep Language Server. You can see the output in `output` tab.",
 					"type": "string",
@@ -51,10 +61,7 @@
 				},
 				"steep.jobs": {
 					"markdownDescription": "The value for `--jobs` option. This is the number of type-check workers of Steep Language Server.",
-					"type": [
-						"numeric",
-						"null"
-					],
+					"type": ["integer", "null"],
 					"default": null,
 					"minimum": 1
 				}
@@ -82,6 +89,7 @@
 		"vscode-test": "^1.6.1"
 	},
 	"dependencies": {
+		"shell-args": "^1.0.0",
 		"vscode-languageclient": "^8.0.2"
 	}
 }

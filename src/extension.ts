@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, ExecutableOptions, State, WorkspaceFolder } from 'vscode-languageclient/node';
 import { existsSync } from 'fs';
+import { shellParse } from 'shell-args';
 
 const _clientSessions: Map<vscode.WorkspaceFolder, LanguageClient> = new Map();
 
@@ -29,6 +30,16 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 		return
 	}
 
+	const loglevel = vscode.workspace.getConfiguration('steep').get("loglevel")
+	const jobs = vscode.workspace.getConfiguration('steep').get("jobs")
+	const enabled = vscode.workspace.getConfiguration('steep').get('enabled')
+	const command = vscode.workspace.getConfiguration('steep').get('command') as string
+
+	if (!enabled) {
+		vscode.window.setStatusBarMessage(`Steep is disabled: ${folder.uri.fsPath}`, 3000);
+		return
+	}
+
 	console.log(`Starting steep in ${folder.uri}...`)
 
 	let rubyopt = process.env.RUBYOPT
@@ -38,25 +49,34 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 		shell: true
 	}
 
-	const loglevel = vscode.workspace.getConfiguration('steep').get("loglevel")
-	const jobs = vscode.workspace.getConfiguration('steep').get("jobs")
 	let serverOptions: ServerOptions
 
 	const binstub = vscode.Uri.file(`${folder.uri.path}/bin/steep`)
 	const jobsOption = jobs ? [`--jobs=${jobs}`] : []
-	if (existsSync(binstub.fsPath)) {
-		console.log("Detected bin/steep...")
+	const cmdOptions = ["langserver", `--log-level=${loglevel}`, ...jobsOption]
+	if (command.length > 0) {
+		const [cmd, ...cmds] = shellParse(command)
+		console.log(`Command is specified:`, [cmd, ...cmds])
 		serverOptions = {
-			command: "bin/steep",
-			args: ["langserver", `--log-level=${loglevel}`, ...jobsOption],
+			command: cmd,
+			args: [...cmds, ...cmdOptions],
 			options: options
 		}
 	} else {
-		console.log("Using bundle exec to start steep...")
-		serverOptions = {
-			command: "bundle",
-			args: ["exec", "steep", "langserver", `--log-level=${loglevel}`, ...jobsOption],
-			options: options
+		if (existsSync(binstub.fsPath)) {
+			console.log("Detected bin/steep...")
+			serverOptions = {
+				command: "bin/steep",
+				args: cmdOptions,
+				options: options
+			}
+		} else {
+			console.log("Using bundle exec to start steep...")
+			serverOptions = {
+				command: "bundle",
+				args: ["exec", "steep", ...cmdOptions],
+				options: options
+			}
 		}
 	}
 
@@ -72,6 +92,7 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 		await client.start()
 	} catch {
 		// Ignore start failure
+		vscode.window.setStatusBarMessage(`Failed to start steep. See OUTPUT for trouble shooting: ${folder.uri.fsPath}`, 3000);
 	}
 }
 
