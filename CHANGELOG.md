@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.6.0] - 2022-12-05
+
+- Add `steep.command` and `steep.enabled` properties ([#213](https://github.com/soutaro/steep-vscode/pull/213))
+- More detailed description for properties ([#201](https://github.com/soutaro/steep-vscode/pull/201))
+- More stable client session management (no PR)
+
 ## [0.5.0] - 2022-10-19
 
 - Make LSP session management synchronized ([#182](https://github.com/soutaro/steep-vscode/pull/182))
