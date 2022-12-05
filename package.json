@@ -10,7 +10,7 @@
 		"url": "https://github.com/soutaro/steep-vscode.git"
 	},
 	"engines": {
-		"vscode": "^1.72.0"
+		"vscode": "^1.73.1"
 	},
 	"categories": [
 		"Other"
