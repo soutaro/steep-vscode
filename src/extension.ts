@@ -29,6 +29,15 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 		return
 	}
 
+	const loglevel = vscode.workspace.getConfiguration('steep').get("loglevel")
+	const jobs = vscode.workspace.getConfiguration('steep').get("jobs")
+	const enabled = vscode.workspace.getConfiguration('steep').get('enabled')
+
+	if (!enabled) {
+		vscode.window.setStatusBarMessage(`Steep is disabled: ${folder.uri.fsPath}`, 3000);
+		return
+	}
+
 	console.log(`Starting steep in ${folder.uri}...`)
 
 	let rubyopt = process.env.RUBYOPT
@@ -38,8 +47,6 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 		shell: true
 	}
 
-	const loglevel = vscode.workspace.getConfiguration('steep').get("loglevel")
-	const jobs = vscode.workspace.getConfiguration('steep').get("jobs")
 	let serverOptions: ServerOptions
 
 	const binstub = vscode.Uri.file(`${folder.uri.path}/bin/steep`)
@@ -72,6 +79,7 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 		await client.start()
 	} catch {
 		// Ignore start failure
+		vscode.window.setStatusBarMessage(`Failed to start steep. See OUTPUT for trouble shooting: ${folder.uri.fsPath}`, 3000);
 	}
 }
 

@@ -38,6 +38,11 @@
 		"configuration": {
 			"title": "Steep",
 			"properties": {
+				"steep.enabled": {
+					"markdownDescription": "Enable/disable Steep on directory with `Steepfile`",
+					"type": "boolean",
+					"default": true
+				},
 				"steep.loglevel": {
 					"markdownDescription": "The value for `--log-level` option of Steep Language Server. You can see the output in `output` tab.",
 					"type": "string",
