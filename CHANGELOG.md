@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2022-10-19
+
+- Make LSP session management synchronized ([#182](https://github.com/soutaro/steep-vscode/pull/182))
+- Make deactivate async ([#195](https://github.com/soutaro/steep-vscode/pull/195))
+
 ## [0.4.0] - 2021-03-10
 
 - Update to support VSCode 1.54.1
