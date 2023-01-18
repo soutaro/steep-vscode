@@ -25,11 +25,13 @@ async function stopSteep(folder: vscode.WorkspaceFolder) {
 // Start Steep if `Steepfile` exists, and register the `LanguageClient` to `_clientSessions`
 //
 async function startSteep(folder: vscode.WorkspaceFolder) {
-	const file = vscode.Uri.file(`${folder.uri.path}/Steepfile`)
+	const steepfileName = vscode.workspace.getConfiguration('steep').get<string>("steepfile") ?? 'Steepfile'
+	const file = vscode.Uri.file(`${folder.uri.path}/${steepfileName}`)
 	if (!existsSync(file.fsPath)) {
 		return
 	}
 
+	const gemfileName = vscode.workspace.getConfiguration('steep').get<string>("gemfile") ?? 'Gemfile'
 	const loglevel = vscode.workspace.getConfiguration('steep').get("loglevel")
 	const jobs = vscode.workspace.getConfiguration('steep').get("jobs")
 	const enabled = vscode.workspace.getConfiguration('steep').get('enabled')
@@ -45,7 +47,8 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 	let rubyopt = process.env.RUBYOPT
 	const options: ExecutableOptions = {
 		cwd: folder.uri.fsPath,
-		env: { ...process.env, RUBYOPT: `${ rubyopt || "" } -EUTF-8` },
+		// Prefer BUNDLE_GEMFILE via process.env rathter than plugin option too keep backward compatibility
+		env: { BUNDLE_GEMFILE: gemfileName, ...process.env, RUBYOPT: `${rubyopt || ""} -EUTF-8` },
 		shell: true
 	}
 
@@ -53,7 +56,7 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 
 	const binstub = vscode.Uri.file(`${folder.uri.path}/bin/steep`)
 	const jobsOption = jobs ? [`--jobs=${jobs}`] : []
-	const cmdOptions = ["langserver", `--log-level=${loglevel}`, ...jobsOption]
+	const cmdOptions = ["langserver", `--log-level=${loglevel}`, `--steepfile=${steepfileName}`, ...jobsOption]
 	if (command.length > 0) {
 		const [cmd, ...cmds] = shellParse(command)
 		console.log(`Command is specified:`, [cmd, ...cmds])
