@@ -31,6 +31,7 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 		return
 	}
 
+	const gemfileName = vscode.workspace.getConfiguration('steep').get<string>("gemfile") ?? 'Gemfile'
 	const loglevel = vscode.workspace.getConfiguration('steep').get("loglevel")
 	const jobs = vscode.workspace.getConfiguration('steep').get("jobs")
 	const enabled = vscode.workspace.getConfiguration('steep').get('enabled')
@@ -46,7 +47,8 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 	let rubyopt = process.env.RUBYOPT
 	const options: ExecutableOptions = {
 		cwd: folder.uri.fsPath,
-		env: { ...process.env, RUBYOPT: `${ rubyopt || "" } -EUTF-8` },
+		// Prefer BUNDLE_GEMFILE via process.env rathter than plugin option too keep backward compatibility
+		env: { BUNDLE_GEMFILE: gemfileName, ...process.env, RUBYOPT: `${rubyopt || ""} -EUTF-8` },
 		shell: true
 	}
 

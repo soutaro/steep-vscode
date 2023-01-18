@@ -12,6 +12,7 @@ It has LSP features including:
 * *Restart all* command restarts all Steep processes running for the VSCode. Try this command if something is not working correctly.
 * *Loglevel* option allows to control log level of Steep command. If you set `debug`, many debug prints will be printed and will help you debugging Steep.
 * *Steepfile* option allows to change the `Steepfile` path.
+* *Gemfile* option allows to change the `Gemfile` path.
 
 ## How it works
 

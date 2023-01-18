@@ -69,6 +69,11 @@
 					"type": ["integer", "null"],
 					"default": null,
 					"minimum": 1
+				},
+				"steep.gemfile": {
+					"markdownDescription": "The value for `BUNDLE_GEMFILE` env of bundle execution.",
+					"type": "string",
+					"default": "Gemfile"
 				}
 			}
 		}
