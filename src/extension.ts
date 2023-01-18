@@ -32,6 +32,7 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 		return
 	}
 
+	const gemfileName = vscode.workspace.getConfiguration('steep').get<string>("gemfile") ?? 'Gemfile'
 	const loglevel = vscode.workspace.getConfiguration('steep').get("loglevel")
 	const jobs = vscode.workspace.getConfiguration('steep').get("jobs")
 	const enabled = vscode.workspace.getConfiguration('steep').get('enabled')
@@ -66,6 +67,7 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 
 	const env = { ...process.env }
 	env.RUBYOPT = `${ rubyopt || "" } -EUTF-8`
+	env.BUNDLE_GEMFILE = gemfileName
 	if (yjit) {
 		env.RUBY_YJIT_ENABLE = "true"
 	}
