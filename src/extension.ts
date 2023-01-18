@@ -26,7 +26,8 @@ async function stopSteep(folder: vscode.WorkspaceFolder) {
 // Start Steep if `Steepfile` exists, and register the `LanguageClient` to `_clientSessions`
 //
 async function startSteep(folder: vscode.WorkspaceFolder) {
-	const file = vscode.Uri.file(`${folder.uri.path}/Steepfile`)
+	const steepfileName = vscode.workspace.getConfiguration('steep').get<string>("steepfile") ?? 'Steepfile'
+	const file = vscode.Uri.file(`${folder.uri.path}/${steepfileName}`)
 	if (!existsSync(file.fsPath)) {
 		return
 	}
@@ -78,7 +79,7 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 
 	const binstub = vscode.Uri.file(`${folder.uri.path}/bin/steep`)
 	const jobsOption = jobs ? [`--jobs=${jobs}`] : []
-	const cmdOptions = ["langserver", `--log-level=${loglevel}`, ...jobsOption]
+	const cmdOptions = ["langserver", `--log-level=${loglevel}`, `--steepfile=${steepfileName}`, ...jobsOption]
 	if (command.length > 0) {
 		const [cmd, ...cmds] = shellParse(command)
 		console.log(`Command is specified:`, [cmd, ...cmds])
