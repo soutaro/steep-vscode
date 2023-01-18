@@ -11,6 +11,7 @@ It has LSP features including:
 
 * *Restart all* command restarts all Steep processes running for the VSCode. Try this command if something is not working correctly.
 * *Loglevel* option allows to control log level of Steep command. If you set `debug`, many debug prints will be printed and will help you debugging Steep.
+* *Steepfile* option allows to change the `Steepfile` path.
 
 ## How it works
 
@@ -21,7 +22,7 @@ If you have a binstub `bin/steep`, it will be used instead of `bundle exec steep
 
 Requirements are:
 
-1. You have to have `Steepfile` in the root of the folder.
+1. You have to have `Steepfile` in the root of the folder. You can change the filename via `steepfile` option.
 2. You have to use Bundler.
 
 ## Acknowledgments
