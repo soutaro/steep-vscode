@@ -34,6 +34,7 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 	const jobs = vscode.workspace.getConfiguration('steep').get("jobs")
 	const enabled = vscode.workspace.getConfiguration('steep').get('enabled')
 	const command = vscode.workspace.getConfiguration('steep').get('command') as string
+	const yjit = vscode.workspace.getConfiguration('steep').get('enableYJIT', true)
 
 	if (!enabled) {
 		vscode.window.setStatusBarMessage(`Steep is disabled: ${folder.uri.fsPath}`, 3000);
@@ -43,9 +44,15 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 	console.log(`Starting steep in ${folder.uri}...`)
 
 	let rubyopt = process.env.RUBYOPT
+
+	const env = { ...process.env }
+	env.RUBYOPT = `${ rubyopt || "" } -EUTF-8`
+	if (yjit) {
+		env.RUBY_YJIT_ENABLE = "true"
+	}
 	const options: ExecutableOptions = {
 		cwd: folder.uri.fsPath,
-		env: { ...process.env, RUBYOPT: `${ rubyopt || "" } -EUTF-8` },
+		env: env,
 		shell: true
 	}
 

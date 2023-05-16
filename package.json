@@ -64,6 +64,11 @@
 					"type": ["integer", "null"],
 					"default": null,
 					"minimum": 1
+				},
+				"steep.enableYJIT": {
+					"markdownDescription": "Set `RUBY_YJIT_ENABLE` environment variable",
+					"type": "boolean",
+					"default": true
 				}
 			}
 		}
