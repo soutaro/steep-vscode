@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { DiagnosticSeverity } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, ExecutableOptions, State, WorkspaceFolder } from 'vscode-languageclient/node';
 import { existsSync } from 'fs';
 import { shellParse } from 'shell-args';
@@ -35,10 +36,27 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 	const enabled = vscode.workspace.getConfiguration('steep').get('enabled')
 	const command = vscode.workspace.getConfiguration('steep').get('command') as string
 	const yjit = vscode.workspace.getConfiguration('steep').get('enableYJIT', true)
+	const severityFilter = vscode.workspace.getConfiguration('steep').get('hideDiagnostics') as string
 
 	if (!enabled) {
 		vscode.window.setStatusBarMessage(`Steep is disabled: ${folder.uri.fsPath}`, 3000);
 		return
+	}
+
+	let severityThreshold: DiagnosticSeverity | undefined = undefined
+	switch (severityFilter) {
+		case "Error":
+			severityThreshold = DiagnosticSeverity.Error
+			break
+		case "Warning":
+			severityThreshold = DiagnosticSeverity.Warning
+			break
+		case "Information":
+			severityThreshold = DiagnosticSeverity.Information
+			break
+		case "Hint":
+			severityThreshold = DiagnosticSeverity.Hint
+			break
 	}
 
 	console.log(`Starting steep in ${folder.uri}...`)
@@ -90,7 +108,16 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 	const clientOptions: LanguageClientOptions = {
 		documentSelector: ['ruby', 'ruby-signature', 'rbs'],
 		diagnosticCollectionName: "steeprb",
-		outputChannel: vscode.window.createOutputChannel("Steep")
+		outputChannel: vscode.window.createOutputChannel("Steep"),
+		middleware: {
+			handleDiagnostics(uri, diagnostics, next) {
+				const threshold = severityThreshold
+				if (threshold !== undefined) {
+					diagnostics = diagnostics.filter(diagnostic => diagnostic.severity < threshold)
+				}
+				next(uri, diagnostics)
+			},
+		}
 	};
 
 	const client = new LanguageClient("Steep", serverOptions, clientOptions)

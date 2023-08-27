@@ -69,6 +69,23 @@
 					"markdownDescription": "Set `RUBY_YJIT_ENABLE` environment variable",
 					"type": "boolean",
 					"default": true
+				},
+				"steep.hideDiagnostics": {
+					"markdownDescription": "Hide diagnostics if its severity is lower than or equal to the option. Empty to disable this feature.",
+					"type": "string",
+					"enum": [
+						"",
+						"Error",
+						"Warning",
+						"Information"
+					],
+					"enumDescriptions": [
+						"Shows all diagnostics",
+						"Hides all diagnostics",
+						"Hides warning and information diagnostics",
+						"Hides information diagnostics"
+					],
+					"default": ""
 				}
 			}
 		}
