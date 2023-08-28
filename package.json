@@ -112,6 +112,6 @@
 	},
 	"dependencies": {
 		"shell-args": "^1.0.0",
-		"vscode-languageclient": "^8.0.2"
+		"vscode-languageclient": "^8.1.0"
 	}
 }
