@@ -26,11 +26,13 @@ async function stopSteep(folder: vscode.WorkspaceFolder) {
 // Start Steep if `Steepfile` exists, and register the `LanguageClient` to `_clientSessions`
 //
 async function startSteep(folder: vscode.WorkspaceFolder) {
-	const file = vscode.Uri.file(`${folder.uri.path}/Steepfile`)
+	const steepfileName = vscode.workspace.getConfiguration('steep').get<string>("steepfile") ?? 'Steepfile'
+	const file = vscode.Uri.file(`${folder.uri.path}/${steepfileName}`)
 	if (!existsSync(file.fsPath)) {
 		return
 	}
 
+	const gemfileName = vscode.workspace.getConfiguration('steep').get<string>("gemfile") ?? 'Gemfile'
 	const loglevel = vscode.workspace.getConfiguration('steep').get("loglevel")
 	const jobs = vscode.workspace.getConfiguration('steep').get("jobs")
 	const enabled = vscode.workspace.getConfiguration('steep').get('enabled')
@@ -65,6 +67,7 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 
 	const env = { ...process.env }
 	env.RUBYOPT = `${ rubyopt || "" } -EUTF-8`
+	env.BUNDLE_GEMFILE = gemfileName
 	if (yjit) {
 		env.RUBY_YJIT_ENABLE = "true"
 	}
@@ -78,7 +81,7 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 
 	const binstub = vscode.Uri.file(`${folder.uri.path}/bin/steep`)
 	const jobsOption = jobs ? [`--jobs=${jobs}`] : []
-	const cmdOptions = ["langserver", `--log-level=${loglevel}`, ...jobsOption]
+	const cmdOptions = ["langserver", `--log-level=${loglevel}`, `--steepfile=${steepfileName}`, ...jobsOption]
 	if (command.length > 0) {
 		const [cmd, ...cmds] = shellParse(command)
 		console.log(`Command is specified:`, [cmd, ...cmds])
