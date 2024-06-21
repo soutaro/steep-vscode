@@ -55,8 +55,7 @@
 				},
 				"steep.gemfile": {
 					"markdownDescription": "The value for `BUNDLE_GEMFILE` environment variable.",
-					"type": "string",
-					"default": "Gemfile"
+					"type": "string"
 				},
 				"steep.loglevel": {
 					"markdownDescription": "The value for `--log-level` option of Steep Language Server. You can see the output in `output` tab.",
