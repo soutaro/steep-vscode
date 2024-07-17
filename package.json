@@ -116,7 +116,7 @@
 		"mocha": "^10.6.0",
 		"tslint": "^6.1.3",
 		"typescript": "^5.5.3",
-		"@vscode/vsce": "^2.30.0",
+		"@vscode/vsce": "^2.31.0",
 		"vscode-test": "^1.6.1"
 	},
 	"dependencies": {
