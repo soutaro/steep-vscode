@@ -95,6 +95,14 @@
 						"Hides information diagnostics"
 					],
 					"default": ""
+				},
+				"steep.installRbsCollection": {
+					"type": "boolean",
+					"default": true
+				},
+				"steep.rbsCollectionLock": {
+					"type": "string",
+					"default": "rbs_collection.lock.yaml"
 				}
 			}
 		}

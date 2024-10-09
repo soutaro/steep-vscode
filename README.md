@@ -13,6 +13,8 @@ It has LSP features including:
 * *Loglevel* option allows to control log level of Steep command. If you set `debug`, many debug prints will be printed and will help you debugging Steep.
 * *Steepfile* option allows to change the `Steepfile` path.
 * *Gemfile* option allows to change the `Gemfile` path.
+* *InstallRbsCollection* option runs `rbs collection install` command on invoking Steep server.
+* *RbsCollectionLock* option allows to change the `rbs_collection.lock` path.
 
 ## How it works
 
