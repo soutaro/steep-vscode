@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { DiagnosticSeverity } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, ExecutableOptions, State, WorkspaceFolder } from 'vscode-languageclient/node';
 import { existsSync } from 'fs';
+import { exec } from 'child_process';
 import { shellParse } from 'shell-args';
 
 const _clientSessions: Map<vscode.WorkspaceFolder, LanguageClient> = new Map();
@@ -21,6 +22,33 @@ async function stopSteep(folder: vscode.WorkspaceFolder) {
 	} catch {
 		// Disposing client may fail
 	}
+}
+
+// Run `rbs collection install` if `rbs_collection.lock.yaml` exists
+function runRbsCollectionInstall(folder: vscode.WorkspaceFolder) {
+	const rbsCollectionLock = vscode.workspace.getConfiguration('steep').get<string>("rbsCollectionLock")
+	const file = vscode.Uri.file(`${folder.uri.path}/${rbsCollectionLock}`)
+	if (!existsSync(file.fsPath)) {
+		return
+	}
+
+	const gemfileName = vscode.workspace.getConfiguration('steep').get<string>("gemfile")
+	const enabled = vscode.workspace.getConfiguration('steep').get('installRbsCollection', false)
+	if (!enabled) {
+		return
+	}
+
+	console.log(`Starting rbs collection install in ${folder.uri}...`)
+
+	const rubyopt = process.env.RUBYOPT
+
+	const env = { ...process.env }
+	env.RUBYOPT = `${rubyopt || ""} -EUTF-8`
+	if (gemfileName) {
+		env.BUNDLE_GEMFILE = gemfileName
+	}
+
+	exec("bundle exec rbs collection install --frozen", { cwd: folder.uri.fsPath, env })
 }
 
 // Start Steep if `Steepfile` exists, and register the `LanguageClient` to `_clientSessions`
@@ -160,6 +188,7 @@ async function ensureSteepInFolder(folder: vscode.WorkspaceFolder) {
 			await stopSteep(folder)
 		}
 
+		runRbsCollectionInstall(folder)
 		await startSteep(folder)
 	}
 }
@@ -180,6 +209,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			console.log("onDidChangeWorkspaceFolders:", event)
 
 			for (const folder of event.added) {
+				runRbsCollectionInstall(folder)
 				startSteep(folder)
 			}
 			for (const folder of event.removed) {
