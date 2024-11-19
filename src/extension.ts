@@ -126,9 +126,23 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 	};
 
 	const client = new LanguageClient("Steep", serverOptions, clientOptions)
+
 	_clientSessions.set(folder, client)
 	try {
 		await client.start()
+
+		const steepVersion = client.initializeResult?.serverInfo?.version
+
+		if (steepVersion) {
+			const components = steepVersion.split(".")
+			vscode.commands.executeCommand('setContext', 'steep.serverVersion', steepVersion)
+			vscode.commands.executeCommand('setContext', 'steep.serverMajorVersion', parseInt(components[0], 10))
+			vscode.commands.executeCommand('setContext', 'steep.serverMinorVersion', parseInt(components[1], 10))
+		} else {
+			vscode.commands.executeCommand('setContext', 'steep.serverVersion', undefined)
+			vscode.commands.executeCommand('setContext', 'steep.serverMajorVersion', 0)
+			vscode.commands.executeCommand('setContext', 'steep.serverMinorVersion', 0)
+		}
 	} catch {
 		// Ignore start failure
 		vscode.window.setStatusBarMessage(`Failed to start steep. See OUTPUT for trouble shooting: ${folder.uri.fsPath}`, 3000);

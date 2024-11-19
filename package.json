@@ -45,6 +45,18 @@
 				"category": "Steep"
 			}
 		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "steep.typecheckAll",
+					"when": "steep.serverMajorVersion >= 1 && steep.serverMinorVersion >= 9"
+				},
+				{
+					"command": "steep.typecheckGroups",
+					"when": "steep.serverMajorVersion >= 1 && steep.serverMinorVersion >= 9"
+				}
+			]
+		},
 		"configuration": {
 			"title": "Steep",
 			"properties": {
