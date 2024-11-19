@@ -30,8 +30,18 @@
 		],
 		"commands": [
 			{
+				"command": "steep.typecheckAll",
+				"title": "Type check project",
+				"category": "Steep"
+			},
+			{
+				"command": "steep.typecheckGroups",
+				"title": "Type check groups",
+				"category": "Steep"
+			},
+			{
 				"command": "steep.restartAll",
-				"title": "Restart all",
+				"title": "Restart",
 				"category": "Steep"
 			}
 		],

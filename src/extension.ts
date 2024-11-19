@@ -176,6 +176,66 @@ export async function activate(context: vscode.ExtensionContext) {
 	)
 
 	context.subscriptions.push(
+		vscode.commands.registerCommand('steep.typecheckAll', async () => {
+			if (vscode.workspace.workspaceFolders) {
+				for (const folder of vscode.workspace.workspaceFolders) {
+					const client = _clientSessions.get(folder)
+					if (client) {
+						await client.sendNotification("$/steep/typecheck/groups", { groups: [] })
+					}
+				}
+			}
+		})
+	)
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('steep.typecheckGroups', async () => {
+			const groups = [] as string[]
+
+			if (vscode.workspace.workspaceFolders) {
+				for (const folder of vscode.workspace.workspaceFolders) {
+					const client = _clientSessions.get(folder)
+					if (client) {
+						const result = await client.sendRequest<string[]>("$/steep/groups")
+						for (const g of result) {
+							if (groups.indexOf(g) == -1) {
+								groups.push(g)
+							}
+						}
+					}
+				}
+			}
+
+			if (groups.length == 0) {
+				return
+			}
+
+			const items: vscode.QuickPickItem[] = groups.map(group => {
+				const title = group.indexOf(".") == -1 ? "target" : "group"
+				return { label: group, description: title }
+			})
+
+			const selectedItems = await vscode.window.showQuickPick(items, {
+					canPickMany: true,
+					placeHolder: "Select the targets/groups to type check",
+			});
+
+			if (selectedItems) {
+				if (selectedItems.length > 0) {
+					if (vscode.workspace.workspaceFolders) {
+						for (const folder of vscode.workspace.workspaceFolders) {
+							const client = _clientSessions.get(folder)
+							if (client) {
+								await client.sendNotification("$/steep/typecheck/groups", { groups: selectedItems.map(item => item.label) })
+							}
+						}
+					}
+				}
+			}
+		})
+	)
+
+	context.subscriptions.push(
 		vscode.workspace.onDidChangeWorkspaceFolders(async (event) => {
 			console.log("onDidChangeWorkspaceFolders:", event)
 
