@@ -30,11 +30,33 @@
 		],
 		"commands": [
 			{
+				"command": "steep.typecheckAll",
+				"title": "Type check project",
+				"category": "Steep"
+			},
+			{
+				"command": "steep.typecheckGroups",
+				"title": "Type check groups",
+				"category": "Steep"
+			},
+			{
 				"command": "steep.restartAll",
-				"title": "Restart all",
+				"title": "Restart",
 				"category": "Steep"
 			}
 		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "steep.typecheckAll",
+					"when": "steep.serverMajorVersion >= 1 && steep.serverMinorVersion >= 9"
+				},
+				{
+					"command": "steep.typecheckGroups",
+					"when": "steep.serverMajorVersion >= 1 && steep.serverMinorVersion >= 9"
+				}
+			]
+		},
 		"configuration": {
 			"title": "Steep",
 			"properties": {

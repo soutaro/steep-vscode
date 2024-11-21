@@ -126,9 +126,23 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 	};
 
 	const client = new LanguageClient("Steep", serverOptions, clientOptions)
+
 	_clientSessions.set(folder, client)
 	try {
 		await client.start()
+
+		const steepVersion = client.initializeResult?.serverInfo?.version
+
+		if (steepVersion) {
+			const components = steepVersion.split(".")
+			vscode.commands.executeCommand('setContext', 'steep.serverVersion', steepVersion)
+			vscode.commands.executeCommand('setContext', 'steep.serverMajorVersion', parseInt(components[0], 10))
+			vscode.commands.executeCommand('setContext', 'steep.serverMinorVersion', parseInt(components[1], 10))
+		} else {
+			vscode.commands.executeCommand('setContext', 'steep.serverVersion', undefined)
+			vscode.commands.executeCommand('setContext', 'steep.serverMajorVersion', 0)
+			vscode.commands.executeCommand('setContext', 'steep.serverMinorVersion', 0)
+		}
 	} catch {
 		// Ignore start failure
 		vscode.window.setStatusBarMessage(`Failed to start steep. See OUTPUT for trouble shooting: ${folder.uri.fsPath}`, 3000);
@@ -170,6 +184,66 @@ export async function activate(context: vscode.ExtensionContext) {
 			if (vscode.workspace.workspaceFolders) {
 				for (const folder of vscode.workspace.workspaceFolders) {
 					await ensureSteepInFolder(folder)
+				}
+			}
+		})
+	)
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('steep.typecheckAll', async () => {
+			if (vscode.workspace.workspaceFolders) {
+				for (const folder of vscode.workspace.workspaceFolders) {
+					const client = _clientSessions.get(folder)
+					if (client) {
+						await client.sendNotification("$/steep/typecheck/groups", { groups: [] })
+					}
+				}
+			}
+		})
+	)
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('steep.typecheckGroups', async () => {
+			const groups = [] as string[]
+
+			if (vscode.workspace.workspaceFolders) {
+				for (const folder of vscode.workspace.workspaceFolders) {
+					const client = _clientSessions.get(folder)
+					if (client) {
+						const result = await client.sendRequest<string[]>("$/steep/groups")
+						for (const g of result) {
+							if (groups.indexOf(g) == -1) {
+								groups.push(g)
+							}
+						}
+					}
+				}
+			}
+
+			if (groups.length == 0) {
+				return
+			}
+
+			const items: vscode.QuickPickItem[] = groups.map(group => {
+				const title = group.indexOf(".") == -1 ? "target" : "group"
+				return { label: group, description: title }
+			})
+
+			const selectedItems = await vscode.window.showQuickPick(items, {
+					canPickMany: true,
+					placeHolder: "Select the targets/groups to type check",
+			});
+
+			if (selectedItems) {
+				if (selectedItems.length > 0) {
+					if (vscode.workspace.workspaceFolders) {
+						for (const folder of vscode.workspace.workspaceFolders) {
+							const client = _clientSessions.get(folder)
+							if (client) {
+								await client.sendNotification("$/steep/typecheck/groups", { groups: selectedItems.map(item => item.label) })
+							}
+						}
+					}
 				}
 			}
 		})
