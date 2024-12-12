@@ -1,0 +1,13 @@
+{
+    "linter": {
+        "rules": {
+            "style": {
+                "noNonNullAssertion": "off",
+                "noParameterAssign": "off"
+            },
+            "suspicious": {
+                "noAsyncPromiseExecutor": "off"
+            }
+        }
+    }
+}
