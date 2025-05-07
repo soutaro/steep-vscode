@@ -133,7 +133,7 @@
 		"@types/glob": "^8.1.0",
 		"@types/mocha": "^10.0.10",
 		"@types/node": "^22.15.15",
-		"@types/vscode": "^1.95.0",
+		"@types/vscode": "^1.99.1",
 		"glob": "^11.0.2",
 		"mocha": "^11.2.2",
 		"tslint": "^6.1.3",
