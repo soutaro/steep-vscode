@@ -132,7 +132,7 @@
 	"devDependencies": {
 		"@types/glob": "^8.1.0",
 		"@types/mocha": "^10.0.10",
-		"@types/node": "^22.15.30",
+		"@types/node": "^24.0.1",
 		"@types/vscode": "^1.95.0",
 		"glob": "^11.0.3",
 		"mocha": "^11.6.0",
