@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import { DiagnosticSeverity } from 'vscode';
-import { LanguageClient, LanguageClientOptions, ServerOptions, ExecutableOptions, State, WorkspaceFolder } from 'vscode-languageclient/node';
-import { existsSync } from 'fs';
+import type { LanguageClientOptions, ServerOptions, ExecutableOptions } from 'vscode-languageclient/node';
+import { LanguageClient, State } from 'vscode-languageclient/node';
+import { existsSync } from 'node:fs';
 import { shellParse } from 'shell-args';
 
 const _clientSessions: Map<vscode.WorkspaceFolder, LanguageClient> = new Map();
@@ -63,10 +64,10 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 
 	console.log(`Starting steep in ${folder.uri}...`)
 
-	let rubyopt = process.env.RUBYOPT
+	const rubyopt = process.env.RUBYOPT
 
 	const env = { ...process.env }
-	env.RUBYOPT = `${ rubyopt || "" } -EUTF-8`
+	env.RUBYOPT = `${rubyopt || ""} -EUTF-8`
 	if (gemfileName) {
 		env.BUNDLE_GEMFILE = gemfileName
 	}
@@ -86,7 +87,7 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 	const cmdOptions = ["langserver", `--log-level=${loglevel}`, `--steepfile=${steepfileName}`, ...jobsOption]
 	if (command.length > 0) {
 		const [cmd, ...cmds] = shellParse(command)
-		console.log(`Command is specified:`, [cmd, ...cmds])
+		console.log("Command is specified:", [cmd, ...cmds])
 		serverOptions = {
 			command: cmd,
 			args: [...cmds, ...cmdOptions],
@@ -149,7 +150,7 @@ async function startSteep(folder: vscode.WorkspaceFolder) {
 	}
 }
 
-async function waitFor(predicate: () => boolean, attempts: number, interval: number = 100) {
+async function waitFor(predicate: () => boolean, attempts: number, interval = 100) {
 	let count = 0
 
 	while (true) {
