@@ -134,7 +134,7 @@
 		"@types/mocha": "^10.0.10",
 		"@types/node": "^22.15.30",
 		"@types/vscode": "^1.95.0",
-		"glob": "^13.0.5",
+		"glob": "^13.0.6",
 		"mocha": "^11.7.5",
 		"tslint": "^6.1.3",
 		"typescript": "^5.9.3",
